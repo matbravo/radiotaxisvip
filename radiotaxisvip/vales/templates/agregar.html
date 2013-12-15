@@ -1,0 +1,112 @@
+{% extends "base_layout.html" %}
+
+{% block contentbody %}
+{% if perms.vales.add_vale %}
+
+<!-- Nav tabs -->
+<ul class="nav nav-tabs">
+	<li class="active"><a href="#enviar_vale" data-toggle="tab">Vales en espera</a></li>
+ 	<li  ><a href="#comenzar_vale" data-toggle="tab">Comenzar vales</a></li> 
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+	<div class="tab-pane" id="comenzar_vale">
+		<h2>Iniciar vale </h2>
+		<form role="form" class="col-md-4" method="POST" action="{% url 'agregar' %}">
+			{% csrf_token %}
+			<div class="form-group">
+				{{ form.vehiculo.errors }}
+				<label for="vehiculo" >Vehiculo</label>
+				<input type="text" maxlength="6" class="form-control"  name="vehiculo" id ="vehiculo" placeholder="Patente">
+			</div>
+			<div class="form-group">
+				<label for="fecha_inicio" >Fecha inicio</label>
+				<input type="text" class="form-control"  name="fecha_inicio" id ="fecha_inicio" placeholder="DD/MM/AA" data-date="12-02-2012" data-date-format="dd/mm/yyyy">
+			</div>
+			<button type="submit" class="btn btn-default">Agregar</button>
+		</form>
+	</div>
+	<div class="tab-pane active" id="enviar_vale">
+		<h2> Enviar vales </h2>
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+				<th>Vale Id</th>
+				<th>Usuario</th>
+				<th>Vehículo</th>
+				<th>Fecha inicio</th>
+				<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for vale in vales %}
+					{% if vale.en_espera %}
+					<tr id="fila{{ vale.id }}">
+						<td> {{vale.id  }} </td>
+						<td> {{vale.usuario  }} </td>
+						<td> {{vale.vehiculo }} </td>
+						<td> {{vale.fecha_inicio }} </td>
+						<td> <button class="btn btn-primary" id="finalizar-btn{{ vale.id }}" value="{{ vale.id }}" data-toggle="modal" data-target="#mymodal" >Finalizar</button>
+						</td>
+					</tr>
+					{% endif %}
+				{% endfor %}
+			</tbody>
+		</table>
+		<div id="mymodal" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title">Finalizar Vale <span id="vale-id-span" ></span></h4>
+					</div>
+					<form role="form" method="POST" action="" id="agregar-mod-form">
+						<div class="modal-body">
+							{% csrf_token %}
+							<input type="hidden" value="" name="vale-id" id="vale-id">
+							<div class="form-group">
+								<label for="fecha_termino" >Fecha termino</label>
+								<input type="text" class="form-control"  name="fecha_termino" id="fecha_termino" placeholder="DD/MM/AA" data-date="12-02-2012" data-date-format="dd/mm/yyyy">
+							</div>
+							<div class="form-group">
+								<label for="distancia" >Distancia</label>
+								<input type="text" class="form-control"  name="distancia" id="distancia" placeholder="Metros" >
+							</div>
+							<div class="form-group">
+								<label for="costo" >Costo</label>
+								<input type="text" class="form-control"  name="costo" id="costo" placeholder="$(CLP)" >
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+							<button type="submit" id="enviar-vale"  class="btn btn-primary">Enviar</button>
+						</div>
+					</form>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		activeTab('agregar');
+		$("#fecha_inicio").datepicker();
+		$("#mymodal").on('show.bs.modal', function (e){
+			$("#vale-id-span").html(e.relatedTarget.value);
+			$("#vale-id").val(e.relatedTarget.value);
+		});
+
+		$("#enviar-vale").click( function(e){
+			var promise = $.post("{% url 'agregar_mod' %}", $('#agregar-mod-form').serialize());
+			/*promise.done(function (){
+				$("#mymodal").modal("hide");
+			});*/
+		});
+	});
+</script>
+
+{% endif %}
+{% endblock contentbody %}
+

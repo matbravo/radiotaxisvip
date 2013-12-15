@@ -1,0 +1,42 @@
+{% extends "base_layout.html" %}
+
+{% block contentbody %}
+<h2> Vales </h2>
+<table class="table table-bordered">
+	<thead>
+		<tr>
+		<th>Vale Id</th>
+		<th>Usuario</th>
+		<th>Vehículo</th>
+		<th>Fecha inicio</th>
+		<th>Fecha termino</th>
+		<th>Costo</th>
+		<th>Distancia</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% if perms.vales.view_vale %}
+		{% for vale in vales %}
+			{% if not vale.en_espera %}
+			<tr {% if vale.estado == "A" %} class="success" {% endif %}
+				{% if vale.estado == "R" %} class="danger" {% endif %}
+			 >
+				<td> {{vale.id  }} </td>
+				<td> {{vale.usuario  }} </td>
+				<td> {{vale.vehiculo }} </td>
+				<td> {{vale.fecha_inicio }} </td>
+				<td> {{vale.fecha_termino }} </td>
+				<td> $ {{vale.costo }} (CLP) </td>
+				<td> {{vale.distancia }} m </td>
+			</tr>
+			{% endif %}
+		{% endfor %}
+	{% endif %}
+	</tbody>
+</table>
+<script type="text/javascript">
+	$(function(){
+		activeTab('home');
+	});
+</script>
+{% endblock contentbody %}

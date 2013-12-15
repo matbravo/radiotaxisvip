@@ -1,0 +1,84 @@
+{% extends "base_layout.html" %}
+
+{% block contentbody %}
+<h2> Estado Vales </h2>
+<table class="table table-bordered">
+	<thead>
+		<tr>
+		<th>Vale Id</th>
+		<th>Usuario</th>
+		<th>Vehículo</th>
+		<th>Fecha inicio</th>
+		<th>Fecha termino</th>
+		<th>Costo</th>
+		<th>Distancia</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% if perms.vales.view_vale %}
+		{% for vale in vales %}
+			{% if not vale.en_espera %}
+			<tr {% if vale.estado == "A" %} class="success" {% endif %}
+				{% if vale.estado == "R" %} class="danger" {% endif %}
+			 >
+				<td> {{vale.id  }} </td>
+				<td> {{vale.usuario  }} </td>
+				<td> {{vale.vehiculo }} </td>
+				<td> {{vale.fecha_inicio }} </td>
+				<td> {{vale.fecha_termino }} </td>
+				<td> $ {{vale.costo }} (CLP) </td>
+				<td> {{vale.distancia }} m </td>
+				<td>
+					<button class="btn btn-primary" id="finalizar-btn{{ vale.id }}" value="{{ vale.id }}" data-toggle="modal" data-target="#mymodal{{ vale.id }}" >Cambiar estado</button>
+				</td>
+			</tr>
+			{% endif %}
+		{% endfor %}
+	{% endif %}
+	</tbody>
+</table>
+{% for vale in vales %}
+	{% if not vale.en_espera %}
+	<div id="mymodal{{ vale.id }}" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Información Vale  {{ vale.id }}</h4>
+				</div>
+				<form role="form" id="mod-form{{ vale.id }}" action="{% url 'cambiar_estado' %}" method="POST" >
+					{% csrf_token %}
+					<div class="modal-body">
+						<p><label> Vehiculo : </label> {{ vale.vehiculo }} </p>
+						<p><label> Fecha inicio : </label>{{ vale.fecha_inicio }} </p>
+						<p><label> Fecha termino : </label> {{ vale.fecha_termino }} </p>
+						<p><label> Distancia : </label> {{ vale.distancia }} </p>
+						<p><label> Costo : </label> {{ vale.costo }} </p>
+						<p>
+							<label> Estado : </label>
+							<select name="vale-estado" form="mod-form{{ vale.id }}" >
+								<option value="A" {% if vale.estado == "A" %} selected="true" {% endif %}> Aceptado </option>
+								<option value="R" {% if vale.estado == "R" %} selected="true" {% endif %}> Rechazado </option>
+								<option value="S" {% if vale.estado == "S" %} selected="true" {% endif %}> Sin Observación </option>
+							</select>
+						</p>
+					</div>
+					<div class="modal-footer">
+						<input type="hidden" name="vale-id" value="{{ vale.id }}" >
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+						<button type="submit" class="btn btn-primary">Enviar</button>
+					</div>
+				</form>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div>
+	{% endif %}
+{% endfor %}
+
+
+<script type="text/javascript">
+	$(function(){
+		activeTab('cambiar-estado');
+	});
+</script>
+{% endblock contentbody %}
