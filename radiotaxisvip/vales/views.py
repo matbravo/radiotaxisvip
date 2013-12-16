@@ -61,7 +61,7 @@ def logout_user(request):
 
 @user_passes_test(user_check, login_url='/vales/')
 def home(request):
-	vales = Vale.objects.all().reverse()
+	vales = Vale.objects.all().order_by('-id')
 	vales_aceptados = vales.filter(estado="A",en_espera=False).count()
 	vales_rechazados = vales.filter(estado="R",en_espera=False).count()
 	vales_sin_observar = vales.filter(estado="S",en_espera=False).count()
@@ -94,7 +94,7 @@ def agregar(request):
 			vale.save()
 			return redirect("/vales/agregar")
 
-	vales = Vale.objects.all().reverse()
+	vales = Vale.objects.all().order_by('-id')
 	vales_aceptados = vales.filter(estado="A",en_espera=False).count()
 	vales_rechazados = vales.filter(estado="R",en_espera=False).count()
 	vales_sin_observar = vales.filter(estado="S",en_espera=False).count()
@@ -129,7 +129,7 @@ def cambiar_estado(request):
 		vale.estado = request.POST['vale-estado']
 		vale.save()
 		return redirect("/vales/cambiar_estado")
-	vales = Vale.objects.all().reverse()
+	vales = Vale.objects.all().order_by('-id')
 	vales_aceptados = vales.filter(estado="A",en_espera=False).count()
 	vales_rechazados = vales.filter(estado="R",en_espera=False).count()
 	vales_sin_observar = vales.filter(estado="S",en_espera=False).count()
@@ -148,7 +148,7 @@ def cambiar_estado(request):
 
 @user_passes_test(user_check, login_url='/vales/')
 def verificar(request):
-	vales = Vale.objects.all().reverse()
+	vales = Vale.objects.all().order_by('-id')
 	vales_aceptados = vales.filter(estado="A",en_espera=False).count()
 	vales_rechazados = vales.filter(estado="R",en_espera=False).count()
 	vales_sin_observar = vales.filter(estado="S",en_espera=False).count()
@@ -164,7 +164,7 @@ def verificar(request):
 @user_passes_test(user_check, login_url='/vales/')
 def verificar_vale(request,vale_id):
 	
-	vales = Vale.objects.all()
+	vales = Vale.objects.all().order_by('-id')
 
 	vales_aceptados = vales.filter(estado="A",en_espera=False).count()
 	vales_rechazados = vales.filter(estado="R",en_espera=False).count()
