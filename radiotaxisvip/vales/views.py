@@ -115,9 +115,7 @@ def agregar_mod(request):
 		vale.costo = request.POST['costo']
 		vale.en_espera = False
 		vale.save()
-		return HttpResponse(status=200)
-	else:
-		return HttpResponse(status=400)
+	return redirect("/vales/agregar")
 
 #################################################
 ############# Cambiar estado controller #########
