@@ -113,8 +113,9 @@ def agregar_mod(request):
 		vale = Vale.objects.get(pk=request.POST['vale-id'])
 		vale.distancia = request.POST['distancia']
 		vale.costo = request.POST['costo']
-		vale.en_espera = False
-		vale.save()
+		if vale.distancia.isdigit() and vale.costo.isdigit():
+			vale.en_espera = False
+			vale.save()
 	return redirect("/vales/agregar")
 
 #################################################
