@@ -16,6 +16,7 @@
 	<div class="col-md-2">
 	{% block sidebar %}
 		<ul id="sidebar" class="nav nav-pills nav-stacked" style="max-width: 260px;">
+			{% if perms.vales.view_vale %}
 			<li id="home-tab">
 				<a href="{% url 'home' %}" >
 					<span class="badge pull-right">
@@ -24,6 +25,8 @@
 					Vales
 				</a>
 			</li>
+			{% endif %}
+			{% if perms.vales.add_vale %}
 			<li id="agregar-tab">
 				<a href="{% url 'agregar' %}" >
 					<span class="badge pull-right">
@@ -32,11 +35,21 @@
 					Agregar Vale
 				</a>
 			</li>
+			{% endif %}
+			{% if perms.vales.modify_vale %}
 			<li id="cambiar-estado-tab">
 				<a href="{% url 'cambiar_estado' %}" >
 					Estado Vales
 				</a>
 			</li>
+			{% endif %}
+			{% if perms.vales.view_vale %}
+			<li id="verificar-tab">
+				<a href="{% url 'verificar' %}" >
+					Verificar vales
+				</a>
+			</li>
+			{% endif %}
 		</ul>
 	{% endblock sidebar %}
 	</div>

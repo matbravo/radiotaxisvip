@@ -143,8 +143,42 @@ def cambiar_estado(request):
 				}
 	return render(request, "cambiar_estado.html" , context)
 
+#################################################
+############# Verificar controller #########
+#################################################
 
+@user_passes_test(user_check, login_url='/vales/')
+def verificar(request):
+	vales = Vale.objects.all()
+	vales_aceptados = vales.filter(estado="A",en_espera=False).count()
+	vales_rechazados = vales.filter(estado="R",en_espera=False).count()
+	vales_sin_observar = vales.filter(estado="S",en_espera=False).count()
+	vales_en_espera = vales.filter(en_espera=True).count()
+	context = { "vales" : vales ,
+				"vales_aceptados" : vales_aceptados,
+				"vales_rechazados" : vales_rechazados,
+				"vales_sin_observar" : vales_sin_observar,
+				"vales_en_espera" : vales_en_espera,
+				}
+	return render(request, "verificar.html" , context)
 
+@user_passes_test(user_check, login_url='/vales/')
+def verificar_vale(request,vale_id):
+	
+	vales = Vale.objects.all()
+
+	vales_aceptados = vales.filter(estado="A",en_espera=False).count()
+	vales_rechazados = vales.filter(estado="R",en_espera=False).count()
+	vales_sin_observar = vales.filter(estado="S",en_espera=False).count()
+	vales_en_espera = vales.filter(en_espera=True).count()
+	vales = vales.filter(pk=vale_id)
+	context = { "vales" : vales ,
+				"vales_aceptados" : vales_aceptados,
+				"vales_rechazados" : vales_rechazados,
+				"vales_sin_observar" : vales_sin_observar,
+				"vales_en_espera" : vales_en_espera,
+				}
+	return render(request, "verificar.html" , context)
 
 
 
