@@ -61,7 +61,7 @@
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 						<h4 class="modal-title">Finalizar Vale <span id="vale-id-span" ></span></h4>
 					</div>
-					<form role="form" method="POST" action="{% url 'agregar_mod' %" id="agregar-mod-form">
+					<form role="form" method="POST" action="{% url 'agregar_mod' %}" id="agregar-mod-form">
 						<div class="modal-body">
 							{% csrf_token %}
 							<input type="hidden" value="" name="vale-id" id="vale-id">
