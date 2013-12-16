@@ -22,7 +22,7 @@
 			</div>
 			<div class="form-group">
 				<label for="fecha_inicio" >Fecha inicio</label>
-				<input type="text" class="form-control"  name="fecha_inicio" id ="fecha_inicio" placeholder="DD/MM/AA" data-date="12-02-2012" data-date-format="dd/mm/yyyy">
+				<input type="text" class="form-control"  name="fecha_inicio" id ="fecha_inicio" placeholder="MM/DD/AA" data-date-format="mm/dd/yyyy">
 			</div>
 			<button type="submit" class="btn btn-default">Agregar</button>
 		</form>
@@ -61,13 +61,13 @@
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 						<h4 class="modal-title">Finalizar Vale <span id="vale-id-span" ></span></h4>
 					</div>
-					<form role="form" method="POST" action="" id="agregar-mod-form">
+					<form role="form" method="POST" action="{% url 'agregar_mod' %" id="agregar-mod-form">
 						<div class="modal-body">
 							{% csrf_token %}
 							<input type="hidden" value="" name="vale-id" id="vale-id">
 							<div class="form-group">
 								<label for="fecha_termino" >Fecha termino</label>
-								<input type="text" class="form-control"  name="fecha_termino" id="fecha_termino" placeholder="DD/MM/AA" data-date="12-02-2012" data-date-format="dd/mm/yyyy">
+								<input type="text" class="form-control"  name="fecha_termino" id="fecha_termino" placeholder="MM/DD/AA" data-date-format="mm/dd/yyyy">
 							</div>
 							<div class="form-group">
 								<label for="distancia" >Distancia</label>
@@ -92,18 +92,19 @@
 <script type="text/javascript">
 	$(function(){
 		activeTab('agregar');
-		$("#fecha_inicio").datepicker();
+		$("#fecha_inicio").datepicker({
+			changeMonth: true,
+      		changeYear: true,
+      		yearRange: "1900:2012",
+		});
 		$("#mymodal").on('show.bs.modal', function (e){
 			$("#vale-id-span").html(e.relatedTarget.value);
 			$("#vale-id").val(e.relatedTarget.value);
 		});
 
-		$("#enviar-vale").click( function(e){
+		/*$("#enviar-vale").click( function(e){
 			var promise = $.post("{% url 'agregar_mod' %}", $('#agregar-mod-form').serialize());
-			/*promise.done(function (){
-				$("#mymodal").modal("hide");
-			});*/
-		});
+		});*/
 	});
 </script>
 

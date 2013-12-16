@@ -6,8 +6,8 @@ from django.forms import ModelForm
 class Vale(models.Model):
 	usuario = models.ForeignKey(User)
 	vehiculo = models.CharField(max_length=6)
-	fecha_inicio = models.DateTimeField()
-	fecha_termino = models.DateTimeField()
+	fecha_inicio = models.DateField()
+	fecha_termino = models.DateField()
 	#hora_inicio = models.TimeField()
 	#hora_termino = models.TimeField()
 	costo = models.PositiveIntegerField()
